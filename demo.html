@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "@sirpepe/light-dark-toggle": "./dist/index.js"
+        }
+      }
+    </script>
+
+    <style>
+      h1 {
+        margin: 1rem;
+      }
+      body {
+        background-color: white;
+      }
+      .parent {
+        color-scheme: light dark;
+        &:has(light-dark-toggle:state(light)) {
+          color-scheme: light;
+        }
+        &:has(light-dark-toggle:state(dark)) {
+          color-scheme: dark;
+        }
+        color: light-dark(#031011, #efedea);
+        background-color: light-dark(#efedea, #031011);
+        padding: 1rem;
+        margin: 1rem;
+      }
+      .container {
+        display: flex;
+        justify-content: space-between;
+        .event {
+          background: skyblue;
+          opacity: 0;
+        }
+      }
+      .controls {
+        margin-top: 2em;
+        border: 1px dotted currentColor;
+        padding: 0.5em;
+      }
+      button {
+        font: inherit;
+        font-size: inherit;
+      }
+      span[title] {
+        cursor: help;
+        border-bottom: 1px dotted currentColor;
+        &::after {
+          content: "?";
+          font-size: 0.5em;
+          position: relative;
+          top: -1em;
+        }
+      }
+    </style>
+
+    <script type="module">
+      import "@sirpepe/light-dark-toggle";
+      for (const container of document.querySelectorAll(".container")) {
+        container.insertAdjacentHTML(
+          "beforeend",
+          '<span class="event">Event!</span>'
+        );
+        container.insertAdjacentHTML(
+          "afterend",
+          `<details class="controls">
+<summary>API controls</summary>
+<p><span title="Default choice, overridden by setter or user input">Attribute</span> <code>mode</code>: <button class="removeattr">Remove</button> <button class="setattr">Set to...</button></p>
+<p><span title="Only accepts valid values">Setter</span> <code>mode</code>: <button class="setter">Invoke with...</button></p>
+<p><span title="Returns current mode, whether automatically selected or chosen by the user">Getter</span> <code>mode</code>: <button class="getter">Invoke</button></p>
+</details>`
+        );
+      }
+
+      document.addEventListener("click", (evt) => {
+        if (evt.target.closest(".getter")) {
+          const target = evt.target.closest(".parent").querySelector("light-dark-toggle");
+          window.alert(target.mode);
+          return;
+        }
+        if (evt.target.closest(".setter")) {
+          const target = evt.target.closest(".parent").querySelector("light-dark-toggle");
+          const input = window.prompt("Enter new mode (valid values: light, dark, auto)");
+          if (input !== null) {
+            try {
+              target.mode = input;
+            } catch (error) {
+              window.alert(error);
+              console.error(error);
+            }
+          }
+          return;
+        }
+        if (evt.target.closest(".removeattr")) {
+          const target = evt.target.closest(".parent").querySelector("light-dark-toggle");
+          target.removeAttribute("mode");
+          return;
+        }
+        if (evt.target.closest(".setattr")) {
+          const target = evt.target.closest(".parent").querySelector("light-dark-toggle");
+          const input = window.prompt("Enter new attribute value (valid values: light, dark, auto) - any string will be accepted");
+          if (input !== null) {
+            target.setAttribute("mode", input);
+          }
+          return;
+        }
+      });
+
+      document.addEventListener("lightdarkchange", (evt) => {
+        const container = evt.target.closest(".container");
+        const target = container.querySelector(".event");
+        target.animate([{ opacity: "0" }, { opacity: "1" }, { opacity: "0" }], {
+          duration: 500,
+          iterations: 1,
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1>Demos</h1>
+
+    <div class="parent">
+      <h2><code>&lt;light-dark-toggle /&gt;</code>, default UI</h2>
+      <p>
+        Falls back to <code>prefers-color-scheme</code> unless the user picks
+        something different.
+      </p>
+      <div class="container">
+        <light-dark-toggle></light-dark-toggle>
+      </div>
+    </div>
+
+    <div class="parent">
+      <h2><code>&lt;light-dark-toggle mode="auto" /&gt;</code>, default UI</h2>
+      <p>
+        Also falls back to <code>prefers-color-scheme</code> unless the user
+        picks something different.
+      </p>
+      <div class="container">
+        <light-dark-toggle></light-dark-toggle>
+      </div>
+    </div>
+
+    <div class="parent">
+      <h2><code>&lt;light-dark-toggle mode="light" /&gt;</code>, default UI</h2>
+      <p>Uses <code>"light"</code> unless the user picks something different</p>
+      <div class="container">
+        <light-dark-toggle mode="light"></light-dark-toggle>
+      </div>
+    </div>
+
+    <div class="parent">
+      <h2><code>&lt;light-dark-toggle mode="dark" /&gt;</code>, default UI</h2>
+      <p>Uses <code>"dark"</code> unless the user picks something different</p>
+      <div class="container">
+        <light-dark-toggle mode="dark"></light-dark-toggle>
+      </div>
+    </div>
+
+    <div class="parent">
+      <h2><code>&lt;light-dark-toggle /&gt;</code>, basic custom UI</h2>
+      <p>A twist on the regular toggle with SVG icons</p>
+      <div class="container">
+        <light-dark-toggle>
+          <span class="basicUI">
+            <svg
+              class="basicUI__light"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"
+              />
+            </svg>
+            <svg
+              class="basicUI__dark"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"
+              />
+            </svg>
+          </span>
+        </light-dark-toggle>
+        <style>
+          .basicUI {
+            font-size: 28px;
+            display: inline-block;
+            outline: 2px solid #666;
+            position: relative;
+            border-radius: 1em;
+            width: 1em;
+            height: 1em;
+            transition: all 500ms;
+            svg {
+              width: 0.8em;
+              height: 0.8em;
+              position: absolute;
+              top: 0.1em;
+              left: 0.1em;
+              transition: all 500ms;
+              backface-visibility: hidden;
+            }
+          }
+          light-dark-toggle:has(.basicUI) {
+            &:hover .basicUI {
+              color: hsl(from rebeccapurple h s calc(l * 1.5)) !important;
+            }
+            &:focus-within .basicUI {
+              box-shadow: 0 0 0.5em rebeccapurple;
+            }
+            &:not(:state(auto)) .basicUI {
+              outline-color: hsl(from rebeccapurple h s calc(l * 1.5));
+            }
+            &:state(light) {
+              .basicUI {
+                background-color: #fff;
+                color: #000;
+              }
+              .basicUI__dark {
+                transform: rotateY(180deg);
+              }
+              .basicUI__light {
+                transform: rotateY(0);
+              }
+            }
+            &:state(dark) {
+              .basicUI {
+                background-color: #000;
+                color: #fff;
+              }
+              .basicUI__dark {
+                transform: rotateY(0);
+              }
+              .basicUI__light {
+                transform: rotateY(180deg);
+              }
+            }
+          }
+        </style>
+      </div>
+    </div>
+  </body>
+</html>

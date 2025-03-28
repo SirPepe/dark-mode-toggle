@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "dev": "esbuild index.js --bundle --minify --target=es2022 --outfile=dist/index.js --watch --servedir=."
+  },
+  "dependencies": {
+    "@sirpepe/ornament": "^2.2.2"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.1"
+  }
+}

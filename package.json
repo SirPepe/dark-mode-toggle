@@ -1,6 +1,13 @@
 {
+  "name": "@sirpepe/dark-mode-toggle",
+  "version": "0.0.0",
+  "description": "A web component for switching between light and dark modes",
+  "main": "dist/index.js",
+  "author": "peter@peterkroener.de",
+  "license": "MIT",
   "scripts": {
-    "dev": "esbuild index.js --bundle --minify --target=es2022 --outfile=dist/index.js --watch --servedir=."
+    "dev": "esbuild index.js --bundle --target=es2022 --outfile=dist/index.js --watch --servedir=.",
+    "build": "esbuild index.js --bundle --minify --target=es2022 --outfile=dist/index.js"
   },
   "dependencies": {
     "@sirpepe/ornament": "^2.2.2"

@@ -13,12 +13,14 @@ import {
 } from "@sirpepe/ornament";
 
 class LightDarkChangeEvent extends Event {
-  constructor() {
+  constructor(mode, auto) {
     super("lightdarkchange", {
       bubbles: true,
       composed: true,
-      cancelable: false, // maybe cancelable? for hijacking purposes?
+      cancelable: false,
     });
+    this.mode = mode;
+    this.auto = auto;
   }
 }
 
@@ -103,6 +105,11 @@ export class LightDarkToggleElement extends HTMLElement {
     }
   }
 
+  // Readonly property
+  get auto() {
+    return this.#computeMode().auto;
+  }
+
   // Tracks the previous mode in order to help decide whether setting a mode
   // should cause an event to be dispatched.
   #lastMode = this.#computeMode();
@@ -117,7 +124,7 @@ export class LightDarkToggleElement extends HTMLElement {
     const { mode, auto } = this.#computeMode();
     if (mode !== this.#lastMode) {
       this.#lastMode = mode;
-      this.dispatchEvent(new LightDarkChangeEvent());
+      this.dispatchEvent(new LightDarkChangeEvent(mode, auto));
     }
     if (mode === "light") {
       internals.states.add("light");
@@ -156,6 +163,7 @@ export class LightDarkToggleElement extends HTMLElement {
 <style>
   :host {
     display: inline-block;
+    --accent: var(--light-dark-toggle-accent-color, rebeccapurple);
   }
   *, *::before, *::after {
     box-sizing: border-box;
@@ -228,14 +236,14 @@ export class LightDarkToggleElement extends HTMLElement {
     }
   }
   :host(:hover) .toggle {
-    border-color: rebeccapurple;
+    border-color: var(--accent);
   }
   :host(:focus-within) .toggle {
     outline: 1px solid #FFF;
-    box-shadow: 0 0 0.5em rebeccapurple;
-    border-color: rebeccapurple;
+    box-shadow: 0 0 0.5em var(--accent);
+    border-color: var(--accent);
     &::before {
-      background: rebeccapurple;
+      background: var(--accent);
     }
   }
 </style>`;

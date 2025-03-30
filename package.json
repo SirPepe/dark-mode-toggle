@@ -10,7 +10,7 @@
     "build": "esbuild index.js --bundle --minify --target=es2022 --outfile=dist/index.js"
   },
   "dependencies": {
-    "@sirpepe/ornament": "^2.2.2"
+    "@sirpepe/ornament": "^3.0.0"
   },
   "devDependencies": {
     "esbuild": "^0.25.1"

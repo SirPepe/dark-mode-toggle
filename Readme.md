@@ -1,10 +1,14 @@
 # `<light-dark-toggle>`
 
-A web component for switching between light and dark modes. It keeps an internal state (called "mode") which reflects the user's preferences wrt. light/dark mode, using system preferences as a fallback. The element supports rich HTML, JS, Content and CSS APIs to enable customization, can be controlled with touch, pointer devices and the keyboard.
+A flexible web component for switching between light and dark modes. It keeps an internal state (called "mode") which reflects the user's preferences wrt. light/dark mode, using system preferences as a fallback. The element supports rich HTML, JS, Content and CSS APIs to enable customization, can be controlled with touch, pointer devices and the keyboard.
 
 ## Installation
 
-Install `@sirpepe/light-dark-toggle`, then import the main module somewhere in the page.
+Install `@sirpepe/light-dark-toggle`, then import the main module somewhere in the page. This will auto-register the element with the HTML tag `<light-dark-toggle>`. If you need the tag name to be something else or want to change the custom element options, you can instead import the class `LightDarkToggleElement` from `@sirpepe/light-dark-toggle/lib` and handle registration yourself.
+
+## Demo
+
+Open `demo.html` from `localhost` to see several instances of this element in action.
 
 ## Basic concepts
 
@@ -20,7 +24,7 @@ The element is always either in dark mode or light mode, either of which may or 
 
 ### Auto state
 
-The element's _auto_ state is either `true` or `false` and reflects whether the current mode state has been chosen deliberately. It is `true` if the user or the JS API have interacted with the element or if the `mode` content attribute is set to either `"dark"` or `"light"`.
+The element's _auto_ state is either `true` or `false` and reflects whether the current mode state has been chosen by the user or by the system/browser defaults. It is `true` if the user or the JS API have interacted with the element or if the `mode` content attribute is set to either `"dark"` or `"light"`.
 
 ## Content attributes
 
@@ -43,13 +47,19 @@ Selects the default mode state. Its value, if valid, determines the mode state, 
 
 <!-- Invalid value, falls back to system/browser preferences -->
 <light-dark-toggle mode="asdf"></light-dark-toggle>
+
+<!-- Defaults to "dark", ignoring the system/browser preferences, but is set to "light" via a script -->
+<light-dark-toggle mode="dark" class="scripted"></light-dark-toggle>
+<script>
+  document.querySelector(".scripted").mode = "light";
+</script>
 ```
 
-Changes to the content attribute via [`setAttribute()`](https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute) and similar APIs only affect the `mode` state if the element has not yet been interacted with - just like `value` on `<input>`.
+Changes to the content attribute via [`setAttribute()`](https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute) and similar APIs only affect the `mode` state if the element has not yet been interacted with - just like `value` on `<input>`. The content attribute is just a fallback or default value and is always overruled by user or script input.
 
 ## Custom user interface
 
-The default user interface is a simple toggle. You can replace it with a custom UI my simply adding markup between the opening and closing `<light-dark-toggle>` tags. Thw following replaces the default UI with to SVG icons:
+The default user interface is a simple toggle. You can replace it with a custom UI by adding markup between the opening and closing `<light-dark-toggle>` tags. Thw following replaces the default UI with to SVG icons:
 
 ```html
 <light-dark-toggle class="basic">
@@ -127,10 +137,10 @@ The [`:has()`](https://developer.mozilla.org/en-US/docs/Web/CSS/:has) selector c
   background-color: light-dark(#efedea, #031011);
 }
 :root:has(light-dark-toggle:state(light)) {
-  color-scheme: light;
+  color-scheme: only light;
 }
 :root:has(light-dark-toggle:state(dark)) {
-  color-scheme: dark;
+  color-scheme: only dark;
 }
 ```
 
@@ -142,7 +152,7 @@ The default UI's accent color can be changed by setting `--light-dark-toggle-acc
 
 ### Getter `mode`
 
-Reflects the element's mode state.
+Returns the element's mode state.
 
 ### Setter `mode`
 
@@ -150,10 +160,10 @@ Sets the element's mode state. Valid values are `"dark"`, `"light"`, and `"auto"
 
 ### Readonly property `auto`
 
-Reflects the element's auto state.
+Returns the element's auto state.
 
 ### Event `lightdarkchange`
 
 ✅ bubbles ✅ composed ❌ cancelable
 
-The `lightdarkchange` event is dispatched every time the element's mode changes. Its `mode` and `auto` properties reflect the element's new mode and whether the new mode is due to user choice or browser/system preferences.
+The `lightdarkchange` event is dispatched every time the element's mode changes. Its `mode` and `auto` properties reflect the element's new mode and auto states.

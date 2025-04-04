@@ -1,3 +1,6 @@
 meta.json
 node_modules
-dist
+index.js
+lib.js
+!src/index.js
+!src/lib.js

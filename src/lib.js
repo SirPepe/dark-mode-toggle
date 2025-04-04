@@ -6,10 +6,10 @@ import {
   string,
   subscribe,
   getInternals,
-  define,
   literal,
   bool,
   debounce,
+  enhance,
 } from "@sirpepe/ornament";
 
 class LightDarkChangeEvent extends Event {
@@ -26,7 +26,7 @@ class LightDarkChangeEvent extends Event {
 
 const query = window.matchMedia("(prefers-color-scheme:dark)");
 
-function readQuery() {
+function readDefaults() {
   return query.matches ? "dark" : "light";
 }
 
@@ -40,7 +40,7 @@ function root(instance) {
   return getInternals(instance).shadowRoot;
 }
 
-@define("light-dark-toggle")
+@enhance()
 export class LightDarkToggleElement extends HTMLElement {
   // True when the element's value has been interacted with by means other than
   // setting the attribute (mirrors "value" on <input>). This involves the user
@@ -56,9 +56,9 @@ export class LightDarkToggleElement extends HTMLElement {
   // user has not made any explicit choice via the UI and the attribute "mode"
   // is not set to either "dark" or "light", this value determines the current
   // mode.
-  @subscribe(query, "change", { transform: readQuery })
+  @subscribe(query, "change", { transform: readDefaults })
   @prop(strings(["light", "dark"]))
-  accessor #auto = readQuery();
+  accessor #auto = readDefaults();
 
   // Tracks the choice of mode according to the "mode" attribute. If this
   // attribute's value is not "auto" and the user has not made any explicit

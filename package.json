@@ -18,16 +18,18 @@
   "author": "peter@peterkroener.de",
   "license": "MIT",
   "scripts": {
+    "lint": "eslint .",
     "dev": "esbuild src/index.ts src/lib.ts --bundle --target=es2022 --outdir=dist --watch --servedir=.",
     "build": "esbuild src/index.ts src/lib.ts --bundle --minify --target=es2022 --outdir=dist",
-    "types": "tsc"
+    "types": "tsc",
+    "release": "npm run lint && npm run types && npm run build && release-it"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
     "esbuild": "^0.25.1",
     "eslint": "^9.24.0",
     "eslint-config-prettier": "^10.1.1",
-    "happy-dom": "^17.4.4",
+    "release-it": "^18.1.2",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.29.0"
   },

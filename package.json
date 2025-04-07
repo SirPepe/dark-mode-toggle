@@ -23,13 +23,18 @@
     "types": "tsc"
   },
   "devDependencies": {
+    "@types/node": "^22.14.0",
     "esbuild": "^0.25.1",
     "eslint": "^9.24.0",
     "eslint-config-prettier": "^10.1.1",
+    "happy-dom": "^17.4.4",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.29.0"
   },
   "dependencies": {
     "@sirpepe/ornament": "^3.0.1"
+  },
+  "volta": {
+    "node": "23.11.0"
   }
 }

@@ -14,6 +14,7 @@ import {
 
 type Mode = "light" | "dark";
 type ModeSelection = "light" | "dark" | "auto";
+const QUERY: unique symbol = Symbol.for("LightDarkToggleElementQuery");
 
 export class LightDarkChangeEvent extends Event {
   readonly mode: Mode;
@@ -29,24 +30,21 @@ export class LightDarkChangeEvent extends Event {
   }
 }
 
-const query = window.matchMedia("(prefers-color-scheme:dark)");
-
-function readDefaults(): Mode {
-  return query.matches ? "dark" : "light";
-}
-
 // Custom transformer that accepts a list of strings
 function strings<T extends object, V extends string>(values: V[]) {
   return literal<T, V, string>({ transform: string(), values });
 }
 
 // Helper for subscribing to events on the element's shadow root
-function root(instance: HTMLElement): ShadowRoot {
+function root(instance: LightDarkToggleElement): ShadowRoot {
   return getInternals(instance).shadowRoot!; // we know it's there, come on!
 }
 
 @enhance()
 export class LightDarkToggleElement extends HTMLElement {
+  #root = this.attachShadow({ mode: "open", delegatesFocus: true });
+  [QUERY]: MediaQueryList;
+
   // True when the element's value has been interacted with by means other than
   // setting the attribute (mirrors "value" on <input>). This involves the user
   // changing the  hidden checkbox (which is what @subscribe tracks) as well as
@@ -61,9 +59,11 @@ export class LightDarkToggleElement extends HTMLElement {
   // user has not made any explicit choice via the UI and the attribute "mode"
   // is not set to either "dark" or "light", this value determines the current
   // mode.
-  @subscribe(query, "change", { transform: readDefaults })
+  @subscribe((el) => el[QUERY], "change", {
+    transform: (_, el) => (el[QUERY].matches ? "dark" : "light"),
+  })
   @prop(strings(["light", "dark"] as const))
-  accessor #auto: Mode = readDefaults();
+  accessor #auto: Mode = this[QUERY].matches ? "dark" : "light";
 
   // Tracks the choice of mode according to the "mode" attribute. If this
   // attribute's value is not "auto" and the user has not made any explicit
@@ -75,8 +75,7 @@ export class LightDarkToggleElement extends HTMLElement {
   // Tracks the user's choice via the UI. If not set to auto, this determines
   // the current mode (beating all other inputs)
   @subscribe(root, "change", {
-    transform: (evt: any): ModeSelection =>
-      evt.target.checked ? "dark" : "light",
+    transform: (e: any): ModeSelection => (e.target.checked ? "dark" : "light"),
   })
   @prop(strings(["light", "dark", "auto"] as const))
   accessor #user: ModeSelection = "auto";
@@ -150,13 +149,9 @@ export class LightDarkToggleElement extends HTMLElement {
     }
   }
 
-  // Only creates shadow DOM with the default UI
-  constructor() {
-    super();
-    this.attachShadow({
-      mode: "open",
-      delegatesFocus: true,
-    }).innerHTML = `<label>
+  // Only needs to run once to draw the default UI
+  render() {
+    this.#root.innerHTML = `<label>
   <input type="checkbox">
   <slot>
     <span class="defaultUi">
@@ -253,5 +248,15 @@ export class LightDarkToggleElement extends HTMLElement {
     }
   }
 </style>`;
+  }
+
+  // Allows custom fallback window objects that's NOT just the global object
+  // (eg. for SSR)
+  constructor(fallbackWindow = window) {
+    super();
+    this[QUERY] = (this.ownerDocument.defaultView ?? fallbackWindow).matchMedia(
+      "(prefers-color-scheme:dark)"
+    );
+    this.render();
   }
 }

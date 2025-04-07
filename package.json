@@ -2,21 +2,34 @@
   "name": "@sirpepe/dark-mode-toggle",
   "version": "0.0.0",
   "description": "A web component for switching between light and dark modes",
-  "main": "./index.js",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./index.js",
-    "./lib": "./lib.js"
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./lib": {
+      "import": "./dist/lib.js",
+      "types": "./dist/lib.d.ts"
+    }
   },
   "author": "peter@peterkroener.de",
   "license": "MIT",
   "scripts": {
-    "dev": "esbuild src/index.js src/lib.js --bundle --target=es2022 --outdir=. --watch --servedir=.",
-    "build": "esbuild src/index.js src/lib.js --bundle --minify --target=es2022 --outdir=."
-  },
-  "dependencies": {
-    "@sirpepe/ornament": "^3.0.0"
+    "dev": "esbuild src/index.ts src/lib.ts --bundle --target=es2022 --outdir=dist --watch --servedir=.",
+    "build": "esbuild src/index.ts src/lib.ts --bundle --minify --target=es2022 --outdir=dist",
+    "types": "tsc"
   },
   "devDependencies": {
-    "esbuild": "^0.25.1"
+    "esbuild": "^0.25.1",
+    "eslint": "^9.24.0",
+    "eslint-config-prettier": "^10.1.1",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.29.0"
+  },
+  "dependencies": {
+    "@sirpepe/ornament": "^3.0.1"
   }
 }

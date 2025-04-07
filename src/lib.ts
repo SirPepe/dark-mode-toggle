@@ -12,8 +12,13 @@ import {
   enhance,
 } from "@sirpepe/ornament";
 
-class LightDarkChangeEvent extends Event {
-  constructor(mode, auto) {
+type Mode = "light" | "dark";
+type ModeSelection = "light" | "dark" | "auto";
+
+export class LightDarkChangeEvent extends Event {
+  readonly mode: Mode;
+  readonly auto: boolean;
+  constructor(mode: Mode, auto: boolean) {
     super("lightdarkchange", {
       bubbles: true,
       composed: true,
@@ -26,18 +31,18 @@ class LightDarkChangeEvent extends Event {
 
 const query = window.matchMedia("(prefers-color-scheme:dark)");
 
-function readDefaults() {
+function readDefaults(): Mode {
   return query.matches ? "dark" : "light";
 }
 
 // Custom transformer that accepts a list of strings
-function strings(values) {
-  return literal({ transform: string(), values });
+function strings<T extends object, V extends string>(values: V[]) {
+  return literal<T, V, string>({ transform: string(), values });
 }
 
 // Helper for subscribing to events on the element's shadow root
-function root(instance) {
-  return getInternals(instance).shadowRoot;
+function root(instance: HTMLElement): ShadowRoot {
+  return getInternals(instance).shadowRoot!; // we know it's there, come on!
 }
 
 @enhance()
@@ -50,34 +55,35 @@ export class LightDarkToggleElement extends HTMLElement {
   // require UI updates.
   @subscribe(root, "change", { transform: () => true })
   @prop(bool())
-  accessor #dirtyFlag = false;
+  accessor #dirtyFlag: boolean = false;
 
   // Tracks the dark mode according to the browser/system preferences. If the
   // user has not made any explicit choice via the UI and the attribute "mode"
   // is not set to either "dark" or "light", this value determines the current
   // mode.
   @subscribe(query, "change", { transform: readDefaults })
-  @prop(strings(["light", "dark"]))
-  accessor #auto = readDefaults();
+  @prop(strings(["light", "dark"] as const))
+  accessor #auto: Mode = readDefaults();
 
   // Tracks the choice of mode according to the "mode" attribute. If this
   // attribute's value is not "auto" and the user has not made any explicit
   // choice via the UI, this attribute determines the current mode. Uses a
   // private backend because a custom getter/setter facade is needed.
-  @attr(strings(["light", "dark", "auto"]), { as: "mode" })
-  accessor #attr = "auto";
+  @attr(strings(["light", "dark", "auto"] as const), { as: "mode" })
+  accessor #attr: ModeSelection = "auto";
 
   // Tracks the user's choice via the UI. If not set to auto, this determines
-  // the current mode (beating all other inputs).
+  // the current mode (beating all other inputs)
   @subscribe(root, "change", {
-    transform: (evt) => (evt.target.checked ? "dark" : "light"),
+    transform: (evt: any): ModeSelection =>
+      evt.target.checked ? "dark" : "light",
   })
-  @prop(strings(["light", "dark", "auto"]))
-  accessor #user = "auto";
+  @prop(strings(["light", "dark", "auto"] as const))
+  accessor #user: ModeSelection = "auto";
 
   // Computes the current light/dark mode and whether the current mode was
   // chosen deliberately by the user
-  #computeMode() {
+  #computeMode(): { mode: Mode; auto: boolean } {
     if (this.#user !== "auto") {
       return { mode: this.#user, auto: false };
     }
@@ -88,15 +94,15 @@ export class LightDarkToggleElement extends HTMLElement {
   }
 
   // Facade for the "mode" attribute
-  get mode() {
+  get mode(): Mode {
     return this.#computeMode().mode;
   }
 
   // Facade for the "mode" attribute with type checks and dirty flag management
-  set mode(newValue) {
+  set mode(newValue: string) {
     newValue = String(newValue).trim().toLowerCase();
     if (["dark", "light", "auto"].includes(newValue)) {
-      this.#user = newValue;
+      this.#user = newValue as ModeSelection;
       this.#dirtyFlag = true;
     } else {
       throw new TypeError(
@@ -122,25 +128,25 @@ export class LightDarkToggleElement extends HTMLElement {
   #handleChange() {
     const internals = getInternals(this);
     const { mode, auto } = this.#computeMode();
-    if (mode !== this.#lastMode) {
-      this.#lastMode = mode;
+    if (mode !== this.#lastMode.mode) {
+      this.#lastMode = { mode, auto };
       this.dispatchEvent(new LightDarkChangeEvent(mode, auto));
     }
     if (mode === "light") {
       internals.states.add("light");
       internals.states.delete("dark");
-      internals.shadowRoot.querySelector("input").checked = false;
+      internals.shadowRoot!.querySelector("input")!.checked = false;
     } else {
       internals.states.delete("light");
       internals.states.add("dark");
-      internals.shadowRoot.querySelector("input").checked = true;
+      internals.shadowRoot!.querySelector("input")!.checked = true;
     }
     if (auto) {
       internals.states.add("auto");
-      internals.shadowRoot.querySelector("input").indeterminate = true;
+      internals.shadowRoot!.querySelector("input")!.indeterminate = true;
     } else {
       internals.states.delete("auto");
-      internals.shadowRoot.querySelector("input").indeterminate = false;
+      internals.shadowRoot!.querySelector("input")!.indeterminate = false;
     }
   }
 

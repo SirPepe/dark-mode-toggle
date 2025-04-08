@@ -4,7 +4,7 @@ A flexible web component for switching between light and dark modes. It keeps an
 
 ## Installation
 
-Install `@sirpepe/dark-mode-toggle`, then import the main module somewhere in the page. This will auto-register the element with the HTML tag `<dark-mode-toggle>`. If you need the tag name to be something else or want to change the custom element options, you can instead import the class `LightDarkToggleElement` from `@sirpepe/dark-mode-toggle/lib` and handle registration yourself.
+Install `@sirpepe/dark-mode-toggle`, then import the main module somewhere in the page. This will auto-register the element with the HTML tag `<dark-mode-toggle>`. If you need the tag name to be something else or want to change the custom element options, you can instead import the class `DarkModeToggleElement` from `@sirpepe/dark-mode-toggle/lib` and handle registration yourself.
 
 ## Demo
 
@@ -167,3 +167,7 @@ Returns the element's auto state.
 ✅ bubbles ✅ composed ❌ cancelable
 
 The `darkmodechange` event is dispatched every time the element's mode changes. Its `mode` and `auto` properties reflect the element's new mode and auto states.
+
+## Limitations
+
+The element currently relies on a global `window` and can therefore not reasonably be SSR'd.

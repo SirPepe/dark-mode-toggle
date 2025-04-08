@@ -14,7 +14,6 @@ import {
 
 type Mode = "light" | "dark";
 type ModeSelection = "light" | "dark" | "auto";
-const QUERY: unique symbol = Symbol.for("LightDarkToggleElementQuery");
 
 export class DarkModeChangeEvent extends Event {
   readonly mode: Mode;
@@ -40,10 +39,14 @@ function root(instance: DarkModeToggleElement): ShadowRoot {
   return getInternals(instance).shadowRoot!; // we know it's there, come on!
 }
 
+// The media query list must be somewhat private, but can't be an actual private
+// field because decorators need to access it.
+const QUERY = Symbol("DarkModeToggleElementQuery");
+
 @enhance()
 export class DarkModeToggleElement extends HTMLElement {
   #root = this.attachShadow({ mode: "open", delegatesFocus: true });
-  [QUERY]: MediaQueryList;
+  [QUERY] = window.matchMedia("(prefers-color-scheme:dark)");
 
   // True when the element's value has been interacted with by means other than
   // setting the attribute (mirrors "value" on <input>). This involves the user
@@ -149,8 +152,9 @@ export class DarkModeToggleElement extends HTMLElement {
     }
   }
 
-  // Only needs to run once to draw the default UI
-  render() {
+  // Only needs to draw the default UI
+  constructor() {
+    super();
     this.#root.innerHTML = `<label>
   <input type="checkbox">
   <slot>
@@ -248,15 +252,5 @@ export class DarkModeToggleElement extends HTMLElement {
     }
   }
 </style>`;
-  }
-
-  // Allows custom fallback window objects that's NOT just the global object
-  // (eg. for SSR)
-  constructor(fallbackWindow = window) {
-    super();
-    this[QUERY] = (this.ownerDocument.defaultView ?? fallbackWindow).matchMedia(
-      "(prefers-color-scheme:dark)"
-    );
-    this.render();
   }
 }

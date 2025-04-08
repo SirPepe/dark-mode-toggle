@@ -1,14 +1,14 @@
-import { LightDarkToggleElement, LightDarkChangeEvent } from "./lib";
+import { DarkModeToggleElement, DarkModeChangeEvent } from "./lib";
 
-window.customElements.define("light-dark-toggle", LightDarkToggleElement);
+window.customElements.define("dark-mode-toggle", DarkModeToggleElement);
 
 declare global {
   interface HTMLElementTagNameMap {
-    "light-dark-toggle": LightDarkToggleElement;
+    "dark-mode-toggle": DarkModeToggleElement;
   }
   interface HTMLElementEventMap {
-    lightdarkchange: LightDarkChangeEvent;
+    darkmodechange: DarkModeChangeEvent;
   }
 }
 
-export { LightDarkToggleElement };
+export { DarkModeToggleElement };

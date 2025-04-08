@@ -8,7 +8,7 @@
     <script type="importmap">
       {
         "imports": {
-          "@sirpepe/light-dark-toggle": "./dist/index.js"
+          "@sirpepe/dark-mode-toggle": "./dist/index.js"
         }
       }
     </script>
@@ -22,10 +22,10 @@
       }
       .parent {
         color-scheme: light dark;
-        &:has(light-dark-toggle:state(light)) {
+        &:has(dark-mode-toggle:state(light)) {
           color-scheme: light;
         }
-        &:has(light-dark-toggle:state(dark)) {
+        &:has(dark-mode-toggle:state(dark)) {
           color-scheme: dark;
         }
         color: light-dark(#031011, #efedea);
@@ -63,7 +63,7 @@
     </style>
 
     <script type="module">
-      import "@sirpepe/light-dark-toggle";
+      import "@sirpepe/dark-mode-toggle";
       for (const container of document.querySelectorAll(".container")) {
         container.insertAdjacentHTML(
           "beforeend",
@@ -85,14 +85,14 @@
         if (evt.target.closest(".getter")) {
           const target = evt.target
             .closest(".parent")
-            .querySelector("light-dark-toggle");
+            .querySelector("dark-mode-toggle");
           window.alert(target.mode);
           return;
         }
         if (evt.target.closest(".setter")) {
           const target = evt.target
             .closest(".parent")
-            .querySelector("light-dark-toggle");
+            .querySelector("dark-mode-toggle");
           const input = window.prompt(
             "Enter new mode (valid values: light, dark, auto)"
           );
@@ -109,14 +109,14 @@
         if (evt.target.closest(".removeattr")) {
           const target = evt.target
             .closest(".parent")
-            .querySelector("light-dark-toggle");
+            .querySelector("dark-mode-toggle");
           target.removeAttribute("mode");
           return;
         }
         if (evt.target.closest(".setattr")) {
           const target = evt.target
             .closest(".parent")
-            .querySelector("light-dark-toggle");
+            .querySelector("dark-mode-toggle");
           const input = window.prompt(
             "Enter new attribute value (valid values: light, dark, auto) - any string will be accepted"
           );
@@ -128,7 +128,7 @@
         if (evt.target.closest(".getterauto")) {
           const target = evt.target
             .closest(".parent")
-            .querySelector("light-dark-toggle");
+            .querySelector("dark-mode-toggle");
           window.alert(target.auto);
           return;
         }
@@ -149,48 +149,48 @@
     <h1>Demos</h1>
 
     <div class="parent">
-      <h2><code>&lt;light-dark-toggle /&gt;</code>, default UI</h2>
+      <h2><code>&lt;dark-mode-toggle /&gt;</code>, default UI</h2>
       <p>
         Falls back to <code>prefers-color-scheme</code> unless the user picks
         something different.
       </p>
       <div class="container">
-        <light-dark-toggle></light-dark-toggle>
+        <dark-mode-toggle></dark-mode-toggle>
       </div>
     </div>
 
     <div class="parent">
-      <h2><code>&lt;light-dark-toggle mode="auto" /&gt;</code>, default UI</h2>
+      <h2><code>&lt;dark-mode-toggle mode="auto" /&gt;</code>, default UI</h2>
       <p>
         Also falls back to <code>prefers-color-scheme</code> unless the user
         picks something different.
       </p>
       <div class="container">
-        <light-dark-toggle mode="auto"></light-dark-toggle>
+        <dark-mode-toggle mode="auto"></dark-mode-toggle>
       </div>
     </div>
 
     <div class="parent">
-      <h2><code>&lt;light-dark-toggle mode="light" /&gt;</code>, default UI</h2>
+      <h2><code>&lt;dark-mode-toggle mode="light" /&gt;</code>, default UI</h2>
       <p>Uses <code>"light"</code> unless the user picks something different</p>
       <div class="container">
-        <light-dark-toggle mode="light"></light-dark-toggle>
+        <dark-mode-toggle mode="light"></dark-mode-toggle>
       </div>
     </div>
 
     <div class="parent">
-      <h2><code>&lt;light-dark-toggle mode="dark" /&gt;</code>, default UI</h2>
+      <h2><code>&lt;dark-mode-toggle mode="dark" /&gt;</code>, default UI</h2>
       <p>Uses <code>"dark"</code> unless the user picks something different</p>
       <div class="container">
-        <light-dark-toggle mode="dark"></light-dark-toggle>
+        <dark-mode-toggle mode="dark"></dark-mode-toggle>
       </div>
     </div>
 
     <div class="parent">
-      <h2><code>&lt;light-dark-toggle /&gt;</code>, basic custom UI</h2>
+      <h2><code>&lt;dark-mode-toggle /&gt;</code>, basic custom UI</h2>
       <p>The most bare-bones custom UI</p>
       <div class="container">
-        <light-dark-toggle class="basic">
+        <dark-mode-toggle class="basic">
           <svg
             class="light"
             xmlns="http://www.w3.org/2000/svg"
@@ -219,33 +219,33 @@
               d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"
             />
           </svg>
-        </light-dark-toggle>
+        </dark-mode-toggle>
         <style>
           /* Scale the element for the SVGs */
-          light-dark-toggle.basic {
+          dark-mode-toggle.basic {
             width: 24px;
             height: 24px;
           }
           /* Styles for light mode */
-          light-dark-toggle.basic:state(light) {
+          dark-mode-toggle.basic:state(light) {
             color: #000; /* sets the SVG line color */
             > svg.dark {
               display: none;
             }
           }
           /* Styles for dark mode */
-          light-dark-toggle.basic:state(dark) {
+          dark-mode-toggle.basic:state(dark) {
             color: #fff; /* sets the SVG line color */
             > svg.light {
               display: none;
             }
           }
           /* Styles for non-auto */
-          light-dark-toggle.basic:not(:state(auto)) {
+          dark-mode-toggle.basic:not(:state(auto)) {
             outline: 1px dotted skyblue;
           }
           /* Styles to maintain basic usability */
-          light-dark-toggle.basic:focus-within {
+          dark-mode-toggle.basic:focus-within {
             box-shadow: 0 0 1em skyblue;
           }
         </style>
@@ -254,11 +254,11 @@
 
     <div class="parent">
       <h2>
-        <code>&lt;light-dark-toggle /&gt;</code>, more interesting custom UI
+        <code>&lt;dark-mode-toggle /&gt;</code>, more interesting custom UI
       </h2>
       <p>A twist on the regular toggle with SVG icons</p>
       <div class="container">
-        <light-dark-toggle>
+        <dark-mode-toggle>
           <span class="iconsUI">
             <svg
               class="iconsUI__light"
@@ -289,7 +289,7 @@
               />
             </svg>
           </span>
-        </light-dark-toggle>
+        </dark-mode-toggle>
         <style>
           .iconsUI {
             font-size: 28px;
@@ -310,7 +310,7 @@
               backface-visibility: hidden;
             }
           }
-          light-dark-toggle:has(.iconsUI) {
+          dark-mode-toggle:has(.iconsUI) {
             &:hover .iconsUI {
               color: hsl(from rebeccapurple h s calc(l * 1.5)) !important;
             }

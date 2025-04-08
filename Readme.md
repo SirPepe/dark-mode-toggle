@@ -1,10 +1,10 @@
-# `<light-dark-toggle>`
+# `<dark-mode-toggle>`
 
 A flexible web component for switching between light and dark modes. It keeps an internal state (called "mode") which reflects the user's preferences wrt. light/dark mode, using system preferences as a fallback. The element supports rich HTML, JS, Content and CSS APIs to enable customization, can be controlled with touch, pointer devices and the keyboard.
 
 ## Installation
 
-Install `@sirpepe/light-dark-toggle`, then import the main module somewhere in the page. This will auto-register the element with the HTML tag `<light-dark-toggle>`. If you need the tag name to be something else or want to change the custom element options, you can instead import the class `LightDarkToggleElement` from `@sirpepe/light-dark-toggle/lib` and handle registration yourself.
+Install `@sirpepe/dark-mode-toggle`, then import the main module somewhere in the page. This will auto-register the element with the HTML tag `<dark-mode-toggle>`. If you need the tag name to be something else or want to change the custom element options, you can instead import the class `LightDarkToggleElement` from `@sirpepe/dark-mode-toggle/lib` and handle registration yourself.
 
 ## Demo
 
@@ -34,22 +34,22 @@ Selects the default mode state. Its value, if valid, determines the mode state, 
 
 ```html
 <!-- Auto-detects the mode from the system/browser preferences -->
-<light-dark-toggle></light-dark-toggle>
+<dark-mode-toggle></dark-mode-toggle>
 
 <!-- Also auto-detects the mode from the system/browser preferences -->
-<light-dark-toggle mode="auto"></light-dark-toggle>
+<dark-mode-toggle mode="auto"></dark-mode-toggle>
 
 <!-- Defaults to "light", ignoring the system/browser preferences -->
-<light-dark-toggle mode="light"></light-dark-toggle>
+<dark-mode-toggle mode="light"></dark-mode-toggle>
 
 <!-- Defaults to "dark", ignoring the system/browser preferences -->
-<light-dark-toggle mode="dark"></light-dark-toggle>
+<dark-mode-toggle mode="dark"></dark-mode-toggle>
 
 <!-- Invalid value, falls back to system/browser preferences -->
-<light-dark-toggle mode="asdf"></light-dark-toggle>
+<dark-mode-toggle mode="asdf"></dark-mode-toggle>
 
 <!-- Defaults to "dark", ignoring the system/browser preferences, but is set to "light" via a script -->
-<light-dark-toggle mode="dark" class="scripted"></light-dark-toggle>
+<dark-mode-toggle mode="dark" class="scripted"></dark-mode-toggle>
 <script>
   document.querySelector(".scripted").mode = "light";
 </script>
@@ -59,10 +59,10 @@ Changes to the content attribute via [`setAttribute()`](https://developer.mozill
 
 ## Custom user interface
 
-The default user interface is a simple toggle. You can replace it with a custom UI by adding markup between the opening and closing `<light-dark-toggle>` tags. Thw following replaces the default UI with to SVG icons:
+The default user interface is a simple toggle. You can replace it with a custom UI by adding markup between the opening and closing `<dark-mode-toggle>` tags. Thw following replaces the default UI with to SVG icons:
 
 ```html
-<light-dark-toggle class="basic">
+<dark-mode-toggle class="basic">
   <svg
     class="light"
     xmlns="http://www.w3.org/2000/svg"
@@ -83,7 +83,7 @@ The default user interface is a simple toggle. You can replace it with a custom 
   >
     <path stroke-linecap="round" stroke-linejoin="round" d="..." />
   </svg>
-</light-dark-toggle>
+</dark-mode-toggle>
 ```
 
 You can use CSS states to style your custom UI to match the element's mode.
@@ -100,30 +100,30 @@ These states can be used with the [`:state()` pseudo class](https://developer.mo
 
 ```css
 /* Scale the element for the SVGs */
-light-dark-toggle.basic {
+dark-mode-toggle.basic {
   width: 24px;
   height: 24px;
 }
 /* Styles for light mode */
-light-dark-toggle.basic:state(light) {
+dark-mode-toggle.basic:state(light) {
   color: #000; /* sets the SVG line color */
   > svg.dark {
     display: none;
   }
 }
 /* Styles for dark mode */
-light-dark-toggle.basic:state(dark) {
+dark-mode-toggle.basic:state(dark) {
   color: #fff; /* sets the SVG line color */
   > svg.light {
     display: none;
   }
 }
 /* Styles for non-auto */
-light-dark-toggle.basic:not(:state(auto)) {
+dark-mode-toggle.basic:not(:state(auto)) {
   outline: 1px dotted skyblue;
 }
 /* Styles to maintain basic usability */
-light-dark-toggle:focus-within {
+dark-mode-toggle:focus-within {
   box-shadow: 0 0 1em skyblue;
 }
 ```
@@ -136,17 +136,17 @@ The [`:has()`](https://developer.mozilla.org/en-US/docs/Web/CSS/:has) selector c
   color: light-dark(#031011, #efedea);
   background-color: light-dark(#efedea, #031011);
 }
-:root:has(light-dark-toggle:state(light)) {
+:root:has(dark-mode-toggle:state(light)) {
   color-scheme: only light;
 }
-:root:has(light-dark-toggle:state(dark)) {
+:root:has(dark-mode-toggle:state(dark)) {
   color-scheme: only dark;
 }
 ```
 
 ## CSS Variables
 
-The default UI's accent color can be changed by setting `--light-dark-toggle-accent-color`. It defaults to `rebeccapurple`.
+The default UI's accent color can be changed by setting `--dark-mode-toggle-accent-color`. It defaults to `rebeccapurple`.
 
 ## JavaScript API
 
@@ -162,8 +162,8 @@ Sets the element's mode state. Valid values are `"dark"`, `"light"`, and `"auto"
 
 Returns the element's auto state.
 
-### Event `lightdarkchange`
+### Event `darkmodechange`
 
 ✅ bubbles ✅ composed ❌ cancelable
 
-The `lightdarkchange` event is dispatched every time the element's mode changes. Its `mode` and `auto` properties reflect the element's new mode and auto states.
+The `darkmodechange` event is dispatched every time the element's mode changes. Its `mode` and `auto` properties reflect the element's new mode and auto states.

@@ -16,11 +16,11 @@ type Mode = "light" | "dark";
 type ModeSelection = "light" | "dark" | "auto";
 const QUERY: unique symbol = Symbol.for("LightDarkToggleElementQuery");
 
-export class LightDarkChangeEvent extends Event {
+export class DarkModeChangeEvent extends Event {
   readonly mode: Mode;
   readonly auto: boolean;
   constructor(mode: Mode, auto: boolean) {
-    super("lightdarkchange", {
+    super("darkmodechange", {
       bubbles: true,
       composed: true,
       cancelable: false,
@@ -36,12 +36,12 @@ function strings<T extends object, V extends string>(values: V[]) {
 }
 
 // Helper for subscribing to events on the element's shadow root
-function root(instance: LightDarkToggleElement): ShadowRoot {
+function root(instance: DarkModeToggleElement): ShadowRoot {
   return getInternals(instance).shadowRoot!; // we know it's there, come on!
 }
 
 @enhance()
-export class LightDarkToggleElement extends HTMLElement {
+export class DarkModeToggleElement extends HTMLElement {
   #root = this.attachShadow({ mode: "open", delegatesFocus: true });
   [QUERY]: MediaQueryList;
 
@@ -129,7 +129,7 @@ export class LightDarkToggleElement extends HTMLElement {
     const { mode, auto } = this.#computeMode();
     if (mode !== this.#lastMode.mode) {
       this.#lastMode = { mode, auto };
-      this.dispatchEvent(new LightDarkChangeEvent(mode, auto));
+      this.dispatchEvent(new DarkModeChangeEvent(mode, auto));
     }
     if (mode === "light") {
       internals.states.add("light");

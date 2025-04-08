@@ -174,6 +174,7 @@ export class DarkModeToggleElement extends HTMLElement {
     box-sizing: border-box;
   }
   label {
+    display: block;
     width: 100%;
     height: 100%;
     overflow: hidden;

@@ -39,6 +39,13 @@
   "volta": {
     "node": "23.11.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/SirPepe/dark-mode-toggle.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SirPepe/dark-mode-toggle/issues"
+  },
   "publishConfig": {
     "access": "public"
   }

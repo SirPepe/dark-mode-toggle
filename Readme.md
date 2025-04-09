@@ -1,6 +1,8 @@
 # `<dark-mode-toggle>`
 
-A flexible web component for switching between light and dark modes. It keeps an internal state (called "mode") which reflects the user's preferences wrt. light/dark mode, using system preferences as a fallback. The element supports rich HTML, JS, Content and CSS APIs to enable customization, can be controlled with touch, pointer devices and the keyboard.
+A flexible web component for switching between light and dark modes. It keeps an internal state (called "mode") which reflects the user's preferences wrt. light/dark mode, using system preferences as a fallback. The element features TypeScript support, rich HTML, JS, content and CSS APIs to enable customization, a `darkmodechange` event, and can be controlled with touch, pointer devices and the keyboard.
+
+!["Screenshots of the custom element, demonstrating several different states and UIs"](./screenshot.png)
 
 ## Installation
 
@@ -55,11 +57,11 @@ Selects the default mode state. Its value, if valid, determines the mode state, 
 </script>
 ```
 
-Changes to the content attribute via [`setAttribute()`](https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute) and similar APIs only affect the `mode` state if the element has not yet been interacted with - just like `value` on `<input>`. The content attribute is just a fallback or default value and is always overruled by user or script input.
+Changes to the content attribute via [`setAttribute()`](https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute) and similar APIs only affect the `mode` state if the element has not yet been interacted with - just like `value` on `<input>`. The content attribute serve as a mere fallback or default value and is always overruled by user or script input.
 
 ## Custom user interface
 
-The default user interface is a simple toggle. You can replace it with a custom UI by adding markup between the opening and closing `<dark-mode-toggle>` tags. Thw following replaces the default UI with to SVG icons:
+The default user interface is a simple toggle. You can replace it with a custom UI by adding markup between the opening and closing `<dark-mode-toggle>` tags. The following replaces the default UI with two SVG icons:
 
 ```html
 <dark-mode-toggle class="basic">
@@ -92,9 +94,9 @@ You can use CSS states to style your custom UI to match the element's mode.
 
 The following custom states are supported by the element:
 
-- `light` is set when `mode` is `"light"`
-- `dark` is set when `mode` is `"dark"`
-- `auto` is set when the mode is governed by system/browser preferences
+- `light` is set when the mode state is `"light"`
+- `dark` is set when the mode state is `"dark"`
+- `auto` is set when the mode state is governed by system/browser preferences
 
 These states can be used with the [`:state()` pseudo class](https://developer.mozilla.org/en-US/docs/Web/CSS/:state) to style custom UIs. Assuming the HTML from the example above:
 
@@ -144,6 +146,8 @@ The [`:has()`](https://developer.mozilla.org/en-US/docs/Web/CSS/:has) selector c
 }
 ```
 
+Because the element's mode state reflects the user's preferences with the system/browser defaults as fallback, the above CSS is entirely sufficient to implement dark/light mode - no more `@media` rules required.
+
 ## CSS Variables
 
 The default UI's accent color can be changed by setting `--dark-mode-toggle-accent-color`. It defaults to `rebeccapurple`.
@@ -152,7 +156,7 @@ The default UI's accent color can be changed by setting `--dark-mode-toggle-acce
 
 ### Getter `mode`
 
-Returns the element's mode state.
+Returns the element's mode state (either `"dark"` or `"light"`).
 
 ### Setter `mode`
 
@@ -170,4 +174,4 @@ The `darkmodechange` event is dispatched every time the element's mode changes. 
 
 ## Limitations
 
-The element currently relies on a global `window` and can therefore not reasonably be SSR'd.
+The element currently relies on a global `window` and can therefore not easily be SSR'd.

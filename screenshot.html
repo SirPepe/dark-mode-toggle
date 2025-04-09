@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "@sirpepe/dark-mode-toggle": "./dist/index.js"
+        }
+      }
+    </script>
+    <script type="module">
+      import "@sirpepe/dark-mode-toggle";
+    </script>
+
+    <style>
+      :root {
+        font-family: "Fira Sans Condensed";
+        font-size: 16px;
+        line-height: 1.5;
+      }
+      code {
+        font-family: "Fira Mono";
+      }
+      p {
+        opacity: 0.7;
+        font-style: italic;
+      }
+      h2 {
+        font-size: 1.4em;
+        font-weight: 300;
+      }
+      body {
+        margin: 0;
+        display: grid;
+        grid-template-columns: 50% 50%;
+      }
+      .parent {
+        color-scheme: light dark;
+        &:has(dark-mode-toggle:state(light)) {
+          color-scheme: light;
+        }
+        &:has(dark-mode-toggle:state(dark)) {
+          color-scheme: dark;
+        }
+        color: light-dark(#031011, #efedea);
+        background-color: light-dark(#efedea, #031011);
+        padding: 2em;
+      }
+      .container {
+        display: flex;
+        justify-content: space-between;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="parent">
+      <h2><code>&lt;dark-mode-toggle /&gt;</code>, default UI</h2>
+      <p>
+        Falls back to <code>prefers-color-scheme</code> unless the user picks
+        something different.
+      </p>
+      <div class="container">
+        <dark-mode-toggle></dark-mode-toggle>
+      </div>
+    </div>
+
+    <div class="parent">
+      <h2><code>&lt;dark-mode-toggle mode="auto" /&gt;</code>, default UI</h2>
+      <p>
+        Also falls back to <code>prefers-color-scheme</code> unless the user
+        picks something different.
+      </p>
+      <div class="container">
+        <dark-mode-toggle mode="auto"></dark-mode-toggle>
+      </div>
+    </div>
+
+    <div class="parent">
+      <h2><code>&lt;dark-mode-toggle mode="light" /&gt;</code>, default UI</h2>
+      <p>Uses <code>"light"</code> unless the user picks something different</p>
+      <div class="container">
+        <dark-mode-toggle mode="light"></dark-mode-toggle>
+      </div>
+    </div>
+
+    <div class="parent">
+      <h2><code>&lt;dark-mode-toggle mode="dark" /&gt;</code>, default UI</h2>
+      <p>Uses <code>"dark"</code> unless the user picks something different</p>
+      <div class="container">
+        <dark-mode-toggle mode="dark"></dark-mode-toggle>
+      </div>
+    </div>
+
+    <div class="parent">
+      <h2>
+        <code>&lt;dark-mode-toggle mode="light" /&gt;</code>, basic custom UI
+      </h2>
+      <p>
+        The most bare-bones custom UI, featuring a style for non-auto states
+      </p>
+      <div class="container">
+        <dark-mode-toggle class="basic" mode="dark">
+          <svg
+            class="light"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"
+            />
+          </svg>
+          <svg
+            class="dark"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"
+            />
+          </svg>
+        </dark-mode-toggle>
+        <style>
+          /* Scale the element for the SVGs */
+          dark-mode-toggle.basic {
+            width: 24px;
+            height: 24px;
+          }
+          /* Styles for light mode */
+          dark-mode-toggle.basic:state(light) {
+            color: #000; /* sets the SVG line color */
+            > svg.dark {
+              display: none;
+            }
+          }
+          /* Styles for dark mode */
+          dark-mode-toggle.basic:state(dark) {
+            color: #fff; /* sets the SVG line color */
+            > svg.light {
+              display: none;
+            }
+          }
+          /* Styles for non-auto */
+          dark-mode-toggle.basic:not(:state(auto)) {
+            outline: 1px dotted skyblue;
+          }
+          /* Styles to maintain basic usability */
+          dark-mode-toggle.basic:focus-within {
+            box-shadow: 0 0 1em skyblue;
+          }
+        </style>
+      </div>
+    </div>
+
+    <div class="parent">
+      <h2>
+        <code>&lt;dark-mode-toggle mode="light" /&gt;</code>, more interesting
+        custom UI
+      </h2>
+      <p>A twist on the regular toggle with SVG icons</p>
+      <div class="container">
+        <dark-mode-toggle mode="light">
+          <span class="iconsUI">
+            <svg
+              class="iconsUI__light"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"
+              />
+            </svg>
+            <svg
+              class="iconsUI__dark"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"
+              />
+            </svg>
+          </span>
+        </dark-mode-toggle>
+        <style>
+          dark-mode-toggle:has(.iconsUI) {
+            width: 32px;
+            height: 32px;
+          }
+          .iconsUI {
+            font-size: 28px;
+            display: inline-block;
+            border: 2px solid #666;
+            position: relative;
+            border-radius: 1em;
+            width: 1em;
+            height: 1em;
+            transition: all 500ms;
+            svg {
+              width: 0.8em;
+              height: 0.8em;
+              position: absolute;
+              top: 0.1em;
+              left: 0.1em;
+              transition: all 500ms;
+              backface-visibility: hidden;
+            }
+          }
+          dark-mode-toggle:has(.iconsUI) {
+            &:hover .iconsUI {
+              color: hsl(from rebeccapurple h s calc(l * 1.5)) !important;
+            }
+            &:focus-within .iconsUI {
+              box-shadow: 0 0 0.5em rebeccapurple;
+            }
+            &:not(:state(auto)) .iconsUI {
+              border-color: hsl(from rebeccapurple h s calc(l * 1.5));
+            }
+            &:state(light) {
+              .iconsUI {
+                background-color: #fff;
+                color: #000;
+              }
+              .iconsUI__dark {
+                transform: rotateY(180deg);
+              }
+              .iconsUI__light {
+                transform: rotateY(0);
+              }
+            }
+            &:state(dark) {
+              .iconsUI {
+                background-color: #000;
+                color: #fff;
+              }
+              .iconsUI__dark {
+                transform: rotateY(0);
+              }
+              .iconsUI__light {
+                transform: rotateY(180deg);
+              }
+            }
+          }
+        </style>
+      </div>
+    </div>
+  </body>
+</html>

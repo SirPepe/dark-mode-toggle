@@ -158,11 +158,11 @@ export class DarkModeToggleElement extends HTMLElement {
     this.#root.innerHTML = `<label>
   <input type="checkbox">
   <slot>
-    <span class="defaultUi">
-      <span class="lightIcon">☀️</span>
+    <div class="defaultUi">
+      <svg class="lightIcon" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 19a1 1 0 0 1 .993.883L13 20v1a1 1 0 0 1-1.993.117L11 21v-1a1 1 0 0 1 1-1zM18.313 16.91l.094.083.7.7a1 1 0 0 1-1.32 1.497l-.094-.083-.7-.7a1 1 0 0 1 1.218-1.567l.102.07zM7.007 16.993a1 1 0 0 1 .083 1.32l-.083.094-.7.7a1 1 0 0 1-1.497-1.32l.083-.094.7-.7a1 1 0 0 1 1.414 0zM4 11a1 1 0 0 1 .117 1.993L4 13H3a1 1 0 0 1-.117-1.993L3 11h1zM21 11a1 1 0 0 1 .117 1.993L21 13h-1a1 1 0 0 1-.117-1.993L20 11h1zM6.213 4.81l.094.083.7.7a1 1 0 0 1-1.32 1.497l-.094-.083-.7-.7A1 1 0 0 1 6.11 4.74l.102.07zM19.107 4.893a1 1 0 0 1 .083 1.32l-.083.094-.7.7a1 1 0 0 1-1.497-1.32l.083-.094.7-.7a1 1 0 0 1 1.414 0zM12 2a1 1 0 0 1 .993.883L13 3v1a1 1 0 0 1-1.993.117L11 4V3a1 1 0 0 1 1-1zM12 7a5 5 0 1 1-4.995 5.217L7 12l.005-.217A5 5 0 0 1 12 7z"/></svg>
+      <svg class="darkIcon" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 1.992a10 10 0 1 0 9.236 13.838c.341-.82-.476-1.644-1.298-1.31a6.5 6.5 0 0 1-6.864-10.787l.077-.08c.551-.63.113-1.653-.758-1.653h-.266l-.068-.006-.06-.002z"/></svg>
       <span class="toggle"></span>
-      <span class="darkIcon">🌙</span>
-    </span>
+    </div>
   </slot>
 </label>
 <style>
@@ -174,82 +174,90 @@ export class DarkModeToggleElement extends HTMLElement {
     box-sizing: border-box;
   }
   label {
+    position: relative;
     display: block;
     width: 100%;
     height: 100%;
-    overflow: hidden;
   }
   input {
+    opacity: 0;
     position: absolute;
-    top: -10em;
-    left: -10em;
+    top: 0;
+    left: 0;
   }
   .defaultUi {
-    width: 6em;
-    height: 1em;
+    position: relative;
+    border: 2px solid currentColor;
     display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 0.5em;
+    grid-template-columns: 1rlh 1rlh;
+    grid-template-rows: 1rlh;
+    gap: 0.25rlh;
+    border-radius: 1rlh;
+    align-items: center;
+    justify-items: center;
+    transition: all 300ms;
     .lightIcon, .darkIcon {
-      transition: all 500ms;
-      filter: saturate(0) opacity(0.7);
-    }
-    .toggle {
+      width: 1rlh;
+      height: 1rlh;
       position: relative;
-      border: 2px solid currentColor;
-      border-radius: 1em;
-      &::before {
-        content: "";
-        width: 0.8em;
-        height: 0.8em;
-        background: currentColor;
-        position: absolute;
-        top: 0.1em;
-        left: 0.1em;
-        border-radius: 50%;
-        transition: all 500ms;
-        opacity: 1;
-      }
-      &::after {
-        font: inherit;
-        font-size: 0.5em;
-        content: "Auto";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        transition: all 500ms;
-        opacity: 0;
-      }
-    }
-  }
-  :host(:state(light)) .lightIcon {
-    filter: none;
-  }
-  :host(:state(dark)) .darkIcon {
-    filter: none;
-  }
-  :host(:state(dark)) .toggle::before {
-    left: 1.4em;
-  }
-  /* Hide toggle and show "auto" when neither dirty nor set via attribute */
-  :host(:state(auto)) {
-    .toggle::before {
-      opacity: 0;
-    }
-    .toggle::after {
+      z-index: 1;
+      transform: scale(0.7);
+      transition: inherit;
       opacity: 1;
     }
+    .toggle {
+      position: absolute;
+      top: 0.1rlh;
+      width: 0.8rlh;
+      height: 0.8rlh;
+      background: currentColor;
+      border-radius: 50%;
+      transition: inherit;
+    }
   }
-  :host(:hover) .toggle {
-    border-color: var(--accent);
+  :host(:state(light)) {
+    .toggle {
+      left: 0.1rlh;
+    }
+    .lightIcon {
+      opacity: 0;
+    }
   }
-  :host(:focus-within) .toggle {
-    outline: 1px solid #FFF;
-    box-shadow: 0 0 0.5em var(--accent);
-    border-color: var(--accent);
-    &::before {
-      background: var(--accent);
+  :host(:state(dark)) {
+    .toggle {
+      left: 1.3rlh;
+    }
+    .darkIcon {
+      opacity: 0;
+    }
+  }
+  :host(:state(auto)) {
+    .defaultUi {
+      border-style: dotted;
+    }
+  }
+  :host(:focus-within) {
+    outline: 1px dotted var(--accent);
+    .toggle {
+      background-color: var(--accent);
+    }
+  }
+  :host(:where(:hover, :focus-within)) {
+    .defaultUi {
+      border-color: var(--accent);
+    }
+    &:host(:state(light)) .darkIcon,
+    &:host(:state(dark)) .lightIcon {
+      opacity: 1;
+      transform: scale(0.9) rotate(360deg);
+    }
+  }
+  @media (prefers-reduced-motion) {
+    .defaultUi {
+      transition: none;
+    }
+    .darkIcon, .lightIcon {
+      transform: scale(0.9) !important;
     }
   }
 </style>`;

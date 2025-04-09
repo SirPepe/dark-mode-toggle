@@ -14,6 +14,10 @@
     </script>
 
     <style>
+      :root {
+        font-size: 16px;
+        line-height: 1.5;
+      }
       h1 {
         margin: 1rem;
       }
@@ -134,7 +138,7 @@
         }
       });
 
-      document.addEventListener("lightdarkchange", (evt) => {
+      document.addEventListener("darkmodechange", (evt) => {
         const container = evt.target.closest(".container");
         const target = container.querySelector(".event");
         target.innerHTML = `Event! mode=${evt.mode} auto=${evt.auto}`;
@@ -291,10 +295,14 @@
           </span>
         </dark-mode-toggle>
         <style>
+          dark-mode-toggle:has(.iconsUI) {
+            width: 32px;
+            height: 32px;
+          }
           .iconsUI {
             font-size: 28px;
             display: inline-block;
-            outline: 2px solid #666;
+            border: 2px solid #666;
             position: relative;
             border-radius: 1em;
             width: 1em;
@@ -318,7 +326,7 @@
               box-shadow: 0 0 0.5em rebeccapurple;
             }
             &:not(:state(auto)) .iconsUI {
-              outline-color: hsl(from rebeccapurple h s calc(l * 1.5));
+              border-color: hsl(from rebeccapurple h s calc(l * 1.5));
             }
             &:state(light) {
               .iconsUI {

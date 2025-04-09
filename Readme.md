@@ -2,7 +2,7 @@
 
 A flexible web component for switching between light and dark modes. It keeps an internal state (called "mode") which reflects the user's preferences wrt. light/dark mode, using system preferences as a fallback. The element features TypeScript support, rich HTML, JS, content and CSS APIs to enable customization, a `darkmodechange` event, and can be controlled with touch, pointer devices and the keyboard.
 
-!["Screenshots of the custom element, demonstrating several different states and UIs"](./screenshot.png)
+!["Screenshots of the custom element, demonstrating several different states and UIs"](https://raw.githubusercontent.com/SirPepe/dark-mode-toggle/main/screenshot.png)
 
 ## Installation
 

@@ -156,6 +156,7 @@ export class DarkModeToggleElement extends HTMLElement {
   constructor() {
     super();
     this.#root.innerHTML = `<label>
+  <span class="description">Toggle dark mode</span>
   <input type="checkbox">
   <slot>
     <div class="defaultUi">
@@ -179,7 +180,7 @@ export class DarkModeToggleElement extends HTMLElement {
     width: 100%;
     height: 100%;
   }
-  input {
+  input, .description {
     opacity: 0;
     position: absolute;
     top: 0;

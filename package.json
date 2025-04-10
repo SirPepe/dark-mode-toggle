@@ -1,6 +1,6 @@
 {
   "name": "@sirpepe/dark-mode-toggle",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A web component for switching between light and dark modes",
   "type": "module",
   "main": "./dist/index.js",

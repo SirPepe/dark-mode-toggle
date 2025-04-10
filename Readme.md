@@ -4,6 +4,8 @@ A flexible web component for switching between light and dark modes. It keeps an
 
 !["Screenshots of the custom element, demonstrating several different states and UIs"](https://raw.githubusercontent.com/SirPepe/dark-mode-toggle/main/screenshot.png)
 
+Made by **Peter Kröner** | [Mastodon](https://mastodon.social/@sir_pepe) | [Bluesky](https://bsky.app/profile/sirpepe.bsky.social) | [GitHub](https://github.com/SirPepe/) | [LinkedIn](https://www.linkedin.com/in/peterkroener/)
+
 ## Installation
 
 Install `@sirpepe/dark-mode-toggle`, then import the main module somewhere in the page. This will auto-register the element with the HTML tag `<dark-mode-toggle>`. If you need the tag name to be something else or want to change the custom element options, you can instead import the class `DarkModeToggleElement` from `@sirpepe/dark-mode-toggle/lib` and handle registration yourself.

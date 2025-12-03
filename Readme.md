@@ -177,3 +177,26 @@ The `darkmodechange` event is dispatched every time the element's mode changes. 
 ## Limitations
 
 The element currently relies on a global `window` and can therefore not easily be SSR'd.
+
+## Changelog
+
+### 0.1.3
+
+- Add viewBox for SVGs in default UI
+- Add a changelog
+
+### 0.1.2
+
+- Add text to the (hidden) label inside the shadow DOM
+
+### 0.1.1
+
+- Fix screenshot in Readme for NPM
+
+### 0.1.0
+
+- Revamp default UI
+
+### 0.0.3
+
+- Initial public release

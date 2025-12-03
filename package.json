@@ -26,10 +26,10 @@
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
-    "esbuild": "^0.25.1",
+    "esbuild": "^0.27.0",
     "eslint": "^9.24.0",
     "eslint-config-prettier": "^10.1.1",
-    "release-it": "^18.1.2",
+    "release-it": "^19.0.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.29.0"
   },
